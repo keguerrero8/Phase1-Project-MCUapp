@@ -2,28 +2,46 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Intro to AJAX Practice Tasks</title>
+    <title>My MCU Tracker</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js" charset="utf-8"></script>
   </head>
   <body>
-    <h1>Dog CEO</h1>
-
-    <div id="dog-image-container">
-      <!-- images here -->
+    <h1>My MCU Tracker</h1>
+    <div id="leftpane" class="pane"><!--this will include search bar, starting lists, button for My list tracker -->
+      <input type="text" id="searchbar" placeholder="Search MCU movie">
+      <ul id="searchlist">
+        <!-- here we will add the search list -->
+      </ul>
+      <div id="categories">
+        <p class="helptext">Unsure where to start? </p>
+        <p class="helptext">Check out our lists below!</p>
+        <ul id="movie-categories"> <!--add all beer names here-->
+          <li class="listcategories">Top 10 Rated</li>
+          <li class="listcategories">By Release date</li>
+          <li class="listcategories">Chronologically</li>
+        </ul>
+      </div>
+      <button id="myList">View My List</button>     
     </div>
-
-    <hr>
-    <label for="select-breed">Filter Marvel movies by interest</label>
-    <select id="breed-dropdown" name="select-breed">
-      <option value="a">a</option>
-      <option value="b">b</option>
-      <option value="c">c</option>
-      <option value="d">d</option>
-    </select>
-
-    <ul id="dog-breeds">
-    </ul>
-
+    <div id="centerpane" class="pane">
+      <h2>Movie Title</h2>
+      <img 
+      id="movue-image"
+      alt="Movie cover goes here"
+      src="assets/image-placeholder.jpg"
+      /> <!--image here-->
+      <p>
+        <em id="movie-description">Movie Description Goes Here</em>
+      </p>
+    </div>
+    <div id="rightpane" class="pane">
+      <h3>Movies</h2>
+      <ul>
+        <li class="listcategories">Movie 1</li>
+        <li class="listcategories">Movie 2</li>
+        <li class="listcategories">Movie 3</li>
+      </ul>
+    </div>
   </body>
 </html>
