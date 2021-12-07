@@ -5,23 +5,29 @@ function addImages () {
     fetch("https://mcuapi.herokuapp.com/api/v1/movies")
     .then(data => data.json())
     .then(json => {
-        //create variable for the div
-        //take one element from json, and append it to the div
-        //const div = document.querySelector("#dog-image-container")
-        // const h1 = document.querySelector("h1")
-        // //console.log(json.data)
-        // h1.textContent = json.data[1].title
+        // create variable for the div
+        // take one element from json, and append it to the div
+        const img = document.querySelector("#movie-image")
+        const h2 = document.querySelector("h2")
+        const text = document.querySelector("#movie-description")
+        const ulMovies = document.querySelector("#movie-items")
+        ulMovies.innerHTML = ""
+        h2.textContent = json.data[1].title
+        img.src = json.data[1].cover_url
+        text.textContent = json.data[1].overview
 
-        // for (i=0; i < json.data.length; i++) { //index 21, Guardians of the galaxy 3 is the problem, does not have a url to cover
-        //     if (json.data[i].box_office !== "0") {
-        //         const img = document.createElement("img")
-        //         img.src = json.data[i].cover_url
-        //         img.style.height = "600px"
-        //         div.appendChild(img)
-        //         console.log(json.data[i].title)
-        //         console.log(json.data[i].chronology) 
-        //     }
-        // }
+        for (i=0; i < json.data.length; i++) { //index 21, Guardians of the galaxy 3 is the problem, does not have a url to cover
+            if (json.data[i].box_office !== "0") {
+                const li = document.createElement("li")
+                const hr = document.createElement("hr")
+                li.textContent = json.data[i].title
+                li.className = "listcategories"
+                ulMovies.appendChild(li)
+                ulMovies.appendChild(hr)
+                // console.log(json.data[i].title)
+                // console.log(json.data[i].chronology) 
+            }
+        }
 
         // json.data.forEach(el => {
         //     const img = document.createElement("img")
