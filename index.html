@@ -4,20 +4,29 @@
     <meta charset="utf-8">
     <title>My MCU Tracker</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"> 
     <script src="index.js" charset="utf-8"></script>
   </head>
   <body>
     <h1>My MCU Tracker</h1>
     <div id="leftpane" class="pane"><!--this will include search bar, starting lists, button for My list tracker -->
-      <input type="text" id="searchbar" placeholder="Search MCU movie">
-      <ul id="searchlist">
-        <!-- here we will add the search list -->
-      </ul>
+      <div id="searchWrapper">
+        <input type="text" id="searchbar" placeholder="search movie here">
+        <ul id="searchlist">
+          <!-- here we will add the search list -->
+          <li>SPider-Man: Far From Home</li>
+          <li>Movie 1</li>
+          <li>Movie 1</li>
+          <li>Movie 1</li>
+          <li>Movie 1</li>
+        </ul>
+        <div id="searchIcon"><i class="fas fa-search"></i></div>
+      </div>
       <div id="categories">
         <p class="helptext">Unsure where to start? </p>
         <p class="helptext">Check out our lists below!</p>
         <hr>
-        <ul id="movie-categories"> <!--add all beer names here-->
+        <ul id="movie-categories"> 
           <li id="topTen" class="listcategories">Top 10 Rated</li>
           <li id="releaseDate" class="listcategories">By Release date</li>
           <li id="chronologically" class="listcategories">MCU Timeline</li>
@@ -32,7 +41,7 @@
         id="movie-image"
         alt="Movie cover goes here"
         src=""
-        /> <!--image here-->
+        /> 
       </div>
       <p id="description-container">
         Overview:
@@ -48,9 +57,6 @@
       <h3>Movies</h3>
       <h4 style="margin: 5px;">Ordered by:</h4>
       <ul id="movie-items">
-        <!-- <li class="listcategories">Movie 1</li>
-        <li class="listcategories">Movie 2</li>
-        <li class="listcategories">Movie 3</li> -->
       </ul>
     </div>
   </body>

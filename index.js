@@ -1,11 +1,14 @@
 //1. At page refresh, show featured movie (or most recent release) -- DONE
 //2. Click on any of the left side pane lists, to view a populated list of movies on the right, 
 //and the first of that list in the center -- DONE
-//3. When a movie is selected from the right pane, it should populate at the center pane
-//4. Ability for person to click on add to My list and keep record of those movies
-//5. Click on View My list from left pane and generate the list of movies you have added
+//3. When a movie is selected from the right pane, it should populate at the center pane -- DONE
+//4. Ability for person to click on add to My list and keep record of those movies -- DONE - but need to fix duplicates
+//5. Click on View My list from left pane and generate the list of movies you have added -- DONE - but need to fix bug for first time view
 //6. Implement search bar functionality
 document.addEventListener("DOMContentLoaded", e => {
+    searchBar()
+    ViewMyList()
+    addToMyList()
     initialize()
     topTenLoadList()
     releaseDateLoadList()
@@ -15,7 +18,7 @@ document.addEventListener("DOMContentLoaded", e => {
 //initialize some variables
 let today = new Date()
 let todayDate = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate())
-
+let myList = []
 
 
 // let anotherDate = new Date("2020-05-02")
@@ -29,6 +32,7 @@ function initialize () {
     fetch("https://mcuapi.herokuapp.com/api/v1/movies")
     .then(data => data.json())
     .then(json => {
+        //console.log(json)
         const startTime = new Date(json.data[1].release_date)
         let minTime = startTime.getTime()
         let movieToDisplay
@@ -140,7 +144,7 @@ function chronologicalLoadList () {
 }
 
 
-function displayMovieCenter (movieObject) {
+function displayMovieCenter (movieToDisplay) {
     //save elements to variables
     const img = document.querySelector("#movie-image")
     const h2 = document.querySelector("h2")
@@ -148,13 +152,41 @@ function displayMovieCenter (movieObject) {
     const releaseDate = document.querySelector("#movie-release")
     const boxOffice = document.querySelector("#movie-box-office")
     //save data to elements to display
-    h2.textContent = movieObject.title
-    img.src = movieObject.cover_url
-    text.textContent = movieObject.overview
-    releaseDate.textContent =movieObject.release_date
-    boxOffice.textContent =movieObject.box_office
+    h2.textContent = movieToDisplay.title
+    img.src = movieToDisplay.cover_url
+    text.textContent = movieToDisplay.overview
+    releaseDate.textContent =movieToDisplay.release_date
+    boxOffice.textContent =movieToDisplay.box_office
 
 }
+
+function addToMyList () {
+    const addToMyListBtn = document.querySelector("#addToMyList")
+    addToMyListBtn.addEventListener("click", event => {
+        fetch("https://mcuapi.herokuapp.com/api/v1/movies")
+        .then(data => data.json())
+        .then(movies => {
+            //***add logic so that we dont have duplicates in the Mylist
+            const h2 = document.querySelector("h2")
+            const moveToAddToList = movies.data.find(movie => movie.title === h2.textContent)
+            //debugger
+            console.log(myList)
+            if (myList.includes(moveToAddToList) === false) {
+                myList.push(moveToAddToList)
+                console.log(myList)
+            }
+        })
+    })
+}
+
+//***need to add logic in the case where view my list is selected before adding an item
+function ViewMyList () { 
+    viewMyListBtn = document.querySelector("#myList")
+    viewMyListBtn.addEventListener("click", event => {
+        addMovieList(myList, "My List")
+    })
+}
+
 
 function addMovieList (list, listString) {
     displayMovieCenter(list[0])
@@ -186,6 +218,23 @@ function viewMovieInfo () {
             })
         })
     })
+}
+
+//use fetch to get list of available movies
+//add keyup event listener in search bar and filter list based on startswith function
+//for each element in filter list, create an li element 
+//add css styling so that when search input box is not active, display none the li's
+//add css styling so that when search input box is active, display block the li's
+//the active class should be added via JS after filter method gets those related titles
+//add an click event to all list elements after keyup event so that text content of list element populates in search box
+//when user clicks on user element, that movie should populate to the center screen
+function searchBar () {
+    const inputSearch = document.querySelector("#searchbar")
+    inputSearch.addEventListener("keyup", event => {
+        console.log(event.target.value)
+
+    })
+    
 }
 
 
