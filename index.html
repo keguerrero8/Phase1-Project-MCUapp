@@ -9,24 +9,18 @@
   </head>
   <body>
     <h1>My MCU Tracker</h1>
-    <div id="leftpane" class="pane"><!--this will include search bar, starting lists, button for My list tracker -->
+    <div id="leftpane" class="pane">
       <div id="searchWrapper">
-        <input type="text" id="searchbar" placeholder="search movie here">
-        <ul id="searchlist">
-          <!-- here we will add the search list -->
-          <li>SPider-Man: Far From Home</li>
-          <li>Movie 1</li>
-          <li>Movie 1</li>
-          <li>Movie 1</li>
-          <li>Movie 1</li>
+        <input type="text" id="searchbar" placeholder="Search MCU Movie">
+        <ul id="searchlist" class="inactiveList">
         </ul>
-        <div id="searchIcon"><i class="fas fa-search"></i></div>
+        <!-- <div id="searchIcon"><i class="fas fa-search"></i></div> -->
       </div>
       <div id="categories">
         <p class="helptext">Unsure where to start? </p>
         <p class="helptext">Check out our lists below!</p>
         <hr>
-        <ul id="movie-categories"> 
+        <ul id="movie-categories">
           <li id="topTen" class="listcategories">Top 10 Rated</li>
           <li id="releaseDate" class="listcategories">By Release date</li>
           <li id="chronologically" class="listcategories">MCU Timeline</li>
@@ -41,7 +35,7 @@
         id="movie-image"
         alt="Movie cover goes here"
         src=""
-        /> 
+        />
       </div>
       <p id="description-container">
         Overview:

@@ -1,10 +1,5 @@
-//1. At page refresh, show featured movie (or most recent release) -- DONE
-//2. Click on any of the left side pane lists, to view a populated list of movies on the right, 
-//and the first of that list in the center -- DONE
-//3. When a movie is selected from the right pane, it should populate at the center pane -- DONE
 //4. Ability for person to click on add to My list and keep record of those movies -- DONE - but need to fix duplicates
 //5. Click on View My list from left pane and generate the list of movies you have added -- DONE - but need to fix bug for first time view
-//6. Implement search bar functionality
 document.addEventListener("DOMContentLoaded", e => {
     searchBar()
     ViewMyList()
@@ -19,13 +14,6 @@ document.addEventListener("DOMContentLoaded", e => {
 let today = new Date()
 let todayDate = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate())
 let myList = []
-
-
-// let anotherDate = new Date("2020-05-02")
-
-// if (todayDate.getTime() > anotherDate.getTime()) {
-//     console.log(todayDate.getTime() - anotherDate.getTime())
-// }
 
 //this will load the upcoming movie to be released at the center pane of the app upon reload
 function initialize () {
@@ -220,20 +208,54 @@ function viewMovieInfo () {
     })
 }
 
-//use fetch to get list of available movies
-//add keyup event listener in search bar and filter list based on startswith function
-//for each element in filter list, create an li element 
-//add css styling so that when search input box is not active, display none the li's
-//add css styling so that when search input box is active, display block the li's
-//the active class should be added via JS after filter method gets those related titles
-//add an click event to all list elements after keyup event so that text content of list element populates in search box
+//use fetch to get list of available movies - DONE
+//add keyup event listener in search bar and filter list based on startswith function - DONE
+//for each element in filter list, create an li element - DONE
+//add css styling so that when search input box is not active, display none the li's - DONE
+//add css styling so that when search input box is active, display block the li's - DONE
+//#searchWrapper add active class to unlock red border - DONE
+//#searchlist li add active class to display and remove opacity - DONE
+//the active class should be added via JS after filter method gets those related titles - DONE
+//add a click event to all list elements after keyup event so that text content of list element populates in search box
 //when user clicks on user element, that movie should populate to the center screen
 function searchBar () {
-    const inputSearch = document.querySelector("#searchbar")
+    const inputSearch = document.querySelector("#searchbar") //inputBox
+    const searchWrapper = document.querySelector("#searchWrapper") //searchWrapper
+    const ulSearchList = document.querySelector("#searchlist") //suggBox
+    let movieSearched
     inputSearch.addEventListener("keyup", event => {
-        console.log(event.target.value)
-
-    })
+        userInput = event.target.value
+        // console.log(userInput)
+        if (userInput) {
+            fetch("https://mcuapi.herokuapp.com/api/v1/movies")
+            .then(data => data.json())
+            .then(movies => {
+                // let listForSearch = []
+                const listForSearch = movies.data.filter(movie => movie.title.toLocaleLowerCase().startsWith(event.target.value.toLocaleLowerCase()))
+                //console.log(listForSearch)
+                ulSearchList.innerHTML = ""
+                ulSearchList.classList.remove("inactiveList")
+                searchWrapper.classList.add("activeWrapper")
+                listForSearch.forEach(movie => {
+                    const li = document.createElement("li")
+                    li.textContent = movie.title
+                    ulSearchList.append(li)
+                    li.addEventListener("click", () => {
+                        inputSearch.value = li.textContent
+                        ulSearchList.classList.add("inactiveList")
+                        searchWrapper.classList.remove("activeWrapper")
+                        movieSearched = movies.data.find(movie => movie.title === inputSearch.value)
+                        displayMovieCenter (movieSearched)
+                        //console.log(movieSearched)                      
+                    })
+                })
+            })
+        }
+        else {
+            ulSearchList.classList.add("inactiveList")
+            searchWrapper.classList.remove("activeWrapper")
+        }
+    }) //end of search bar input event listener
     
 }
 
