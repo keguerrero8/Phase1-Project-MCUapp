@@ -16,10 +16,11 @@
       <div id="categories">
         <p class="helptext">Unsure where to start? </p>
         <p class="helptext">Check out our lists below!</p>
+        <hr>
         <ul id="movie-categories"> <!--add all beer names here-->
-          <li class="listcategories">Top 10 Rated</li>
-          <li class="listcategories">By Release date</li>
-          <li class="listcategories">Chronologically</li>
+          <li id="topTen" class="listcategories">Top 10 Rated</li>
+          <li id="releaseDate" class="listcategories">By Release date</li>
+          <li id="chronologically" class="listcategories">MCU Timeline</li>
         </ul>
       </div>
       <button id="myList">View My List</button>     
@@ -30,19 +31,26 @@
         <img 
         id="movie-image"
         alt="Movie cover goes here"
-        src="assets/image-placeholder.jpg"
+        src=""
         /> <!--image here-->
       </div>
       <p id="description-container">
-        <em id="movie-description">Movie Description Goes Here</em>
+        Overview:
+        <em id="movie-description" style="color:rgb(240, 19, 30);">Movie Description Goes Here</em>
       </p>
+      <div style="text-align: center;">
+        <p>Release date: <em id="movie-release">Movie Release date</em></p>
+        <p>Box office: <em id="movie-box-office">Box office</em></p>
+      </div>
+      <button id="addToMyList">Add to My List</button>    
     </div>
     <div id="rightpane" class="pane">
       <h3>Movies</h3>
+      <h4 style="margin: 5px;">Ordered by:</h4>
       <ul id="movie-items">
-        <li class="listcategories">Movie 1</li>
+        <!-- <li class="listcategories">Movie 1</li>
         <li class="listcategories">Movie 2</li>
-        <li class="listcategories">Movie 3</li>
+        <li class="listcategories">Movie 3</li> -->
       </ul>
     </div>
   </body>

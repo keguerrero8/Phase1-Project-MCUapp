@@ -11,13 +11,13 @@ h1 {
   padding: 10px;
 }
 
-h2, h3 {
+h2, h3, h4 {
   text-align: center;
-  text-decoration: underline;
 }
 
-h2 {
+h2, h3 {
   font-size: 35px;
+  text-decoration: underline;
 }
 
 h3 {
@@ -35,7 +35,7 @@ h3 {
 .pane {
   float: left;
   width: 25%;
-  margin: 2%;
+  margin: 1.5%;
 }
 
 #leftpane {
@@ -58,7 +58,7 @@ h3 {
 }
 
 #rightpane {
-  width: 13%;
+  width: 16%;
   padding: 0px;
   border-style: solid;
   border-radius: 5px;
@@ -105,11 +105,10 @@ ul {
 
 .listcategories:hover {
   background-color: rgb(240, 19, 30);
-  color: white;
   cursor: pointer;
 }
 
-#myList {
+#myList, #addToMyList {
   cursor: pointer;
   text-align: center;
   position: relative;
@@ -124,8 +123,9 @@ ul {
   border-color: black;
 }
 
-#myList:hover {
+#myList:hover, #addToMyList:hover {
   background-color: rgb(240, 19, 30);
+  color: white;
 }
 
 img {
