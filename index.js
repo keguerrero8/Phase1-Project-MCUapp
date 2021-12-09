@@ -1,5 +1,5 @@
-//4. Ability for person to click on add to My list and keep record of those movies -- DONE - but need to fix duplicates
-//5. Click on View My list from left pane and generate the list of movies you have added -- DONE - but need to fix bug for first time view
+//2. if there is no movies in My List, nothing happens when view my list is clicked
+//4. Persist My List of movies added
 document.addEventListener("DOMContentLoaded", e => {
     searchBar()
     ViewMyList()
@@ -14,6 +14,7 @@ document.addEventListener("DOMContentLoaded", e => {
 let today = new Date()
 let todayDate = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate())
 let myList = []
+let myListCount = 0
 
 //this will load the upcoming movie to be released at the center pane of the app upon reload
 function initialize () {
@@ -148,36 +149,44 @@ function displayMovieCenter (movieToDisplay) {
 
 }
 
+//add movie to My List if it doesnt already exist in the list
 function addToMyList () {
     const addToMyListBtn = document.querySelector("#addToMyList")
-    addToMyListBtn.addEventListener("click", event => {
+    const counter = document.querySelector("#listCounter")
+    addToMyListBtn.addEventListener("click", () => {
         fetch("https://mcuapi.herokuapp.com/api/v1/movies")
         .then(data => data.json())
         .then(movies => {
-            //***add logic so that we dont have duplicates in the Mylist
             const h2 = document.querySelector("h2")
+            const h4 = document.querySelector("h4")
             const moveToAddToList = movies.data.find(movie => movie.title === h2.textContent)
-            //debugger
-            console.log(myList)
-            if (myList.includes(moveToAddToList) === false) {
+            if (!myList.some(movie => movie.title === moveToAddToList.title)) {
                 myList.push(moveToAddToList)
-                console.log(myList)
+                myListCount++
+                counter.textContent = `My List count: ${myListCount}`
+            }
+            if (h4.textContent === "Ordered by: My List") {
+                addMovieList(myList, "My List", false)
             }
         })
     })
 }
 
-//***need to add logic in the case where view my list is selected before adding an item
+//view my customized list when button is clicked
 function ViewMyList () { 
     viewMyListBtn = document.querySelector("#myList")
-    viewMyListBtn.addEventListener("click", event => {
-        addMovieList(myList, "My List")
+    viewMyListBtn.addEventListener("click", () => {
+        if (myList.length > 0) { //if there is no items in the list, dont call addMovieList
+            addMovieList(myList, "My List")
+        }
     })
 }
 
-
-function addMovieList (list, listString) {
-    displayMovieCenter(list[0])
+//add movie list to right pane, and first movie of that list is featured
+function addMovieList (list, listString, replaceFeature=true) {
+    if (replaceFeature) {
+        displayMovieCenter(list[0])
+    }
     const ulMovies = document.querySelector("#movie-items")
     const h4 = document.querySelector("h4")
     ulMovies.innerHTML = ""
@@ -193,6 +202,7 @@ function addMovieList (list, listString) {
     viewMovieInfo()
 }
 
+//when movie is selected from right pane, that movie will be featured at center with details
 function viewMovieInfo () {
     const ulMovies = document.querySelector("#movie-items")
     const movieList = ulMovies.getElementsByTagName("li")
@@ -208,31 +218,20 @@ function viewMovieInfo () {
     })
 }
 
-//use fetch to get list of available movies - DONE
-//add keyup event listener in search bar and filter list based on startswith function - DONE
-//for each element in filter list, create an li element - DONE
-//add css styling so that when search input box is not active, display none the li's - DONE
-//add css styling so that when search input box is active, display block the li's - DONE
-//#searchWrapper add active class to unlock red border - DONE
-//#searchlist li add active class to display and remove opacity - DONE
-//the active class should be added via JS after filter method gets those related titles - DONE
-//add a click event to all list elements after keyup event so that text content of list element populates in search box
-//when user clicks on user element, that movie should populate to the center screen
+//search bar functionality, populate search list based on API data, and feature movie at 
+//center pane if the movie is selected
 function searchBar () {
-    const inputSearch = document.querySelector("#searchbar") //inputBox
-    const searchWrapper = document.querySelector("#searchWrapper") //searchWrapper
-    const ulSearchList = document.querySelector("#searchlist") //suggBox
+    const inputSearch = document.querySelector("#searchbar") 
+    const searchWrapper = document.querySelector("#searchWrapper") 
+    const ulSearchList = document.querySelector("#searchlist") 
     let movieSearched
     inputSearch.addEventListener("keyup", event => {
         userInput = event.target.value
-        // console.log(userInput)
         if (userInput) {
             fetch("https://mcuapi.herokuapp.com/api/v1/movies")
             .then(data => data.json())
             .then(movies => {
-                // let listForSearch = []
                 const listForSearch = movies.data.filter(movie => movie.title.toLocaleLowerCase().startsWith(event.target.value.toLocaleLowerCase()))
-                //console.log(listForSearch)
                 ulSearchList.innerHTML = ""
                 ulSearchList.classList.remove("inactiveList")
                 searchWrapper.classList.add("activeWrapper")
@@ -245,8 +244,7 @@ function searchBar () {
                         ulSearchList.classList.add("inactiveList")
                         searchWrapper.classList.remove("activeWrapper")
                         movieSearched = movies.data.find(movie => movie.title === inputSearch.value)
-                        displayMovieCenter (movieSearched)
-                        //console.log(movieSearched)                      
+                        displayMovieCenter (movieSearched)                  
                     })
                 })
             })
@@ -255,7 +253,7 @@ function searchBar () {
             ulSearchList.classList.add("inactiveList")
             searchWrapper.classList.remove("activeWrapper")
         }
-    }) //end of search bar input event listener
+    }) 
     
 }
 

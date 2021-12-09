@@ -40,9 +40,6 @@ h3 {
 #leftpane {
   width: 26%;
   padding: 10px;
-  /* border-style: solid;
-  border-radius: 5px;
-  border-color: black; */
 }
 
 #centerpane {
@@ -153,27 +150,27 @@ ul {
   cursor: pointer;
   text-align: center;
   position: relative;
-  padding: 15px;
+  padding: 20px;
   left: 50%;
   transform: translate(-50%);
   margin-top: 20px;
-  background-color: rgb(226, 147, 147);
-  color: black;
+  background-color: black;
+  color: white;
   border-style: solid;
   border-radius: 5px;
   border-color: black;
 }
 
-/* #myList:hover, #addToMyList:hover {
-  background-color: rgb(240, 19, 30);
-  color: white;
-} */
+
 #myList:active, #addToMyList:active {
   transition: 0s;
   background-color: rgb(240, 19, 30);
   color: white;
 }
 
+#listCounter {
+  text-align: center;
+}
 
 img {
   max-width: 100%;
