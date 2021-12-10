@@ -1,27 +1,48 @@
 //2. if there is no movies in My List, nothing happens when view my list is clicked
-//4. Persist My List of movies added
 document.addEventListener("DOMContentLoaded", e => {
+    ViewMyListPOST ()
+    addToMyListPOST()
     searchBar()
-    ViewMyList()
-    addToMyList()
-    initialize()
+    // ViewMyList()
+    // addToMyList()
+    initializePOST ()
+    // initialize()
     topTenLoadList()
     releaseDateLoadList()
     chronologicalLoadList()
+
 })
 
 //initialize some variables
 let today = new Date()
 let todayDate = new Date(today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate())
-let myList = []
-let myListCount = 0
+// let myList = []
+// let myListCount = 0
 
 //this will load the upcoming movie to be released at the center pane of the app upon reload
-function initialize () {
+// function initialize () {
+//     fetch("https://mcuapi.herokuapp.com/api/v1/movies")
+//     .then(data => data.json())
+//     .then(json => {
+//         const startTime = new Date(json.data[1].release_date)
+//         let minTime = startTime.getTime()
+//         let movieToDisplay
+//         for (let movie of json.data) {
+//             const movieDate = new Date(movie.release_date)
+//             const timeDiff = Math.abs(todayDate.getTime() - movieDate.getTime())
+//             if (timeDiff < minTime && movie.box_office === "0") {
+//                 minTime = timeDiff
+//                 movieToDisplay = movie
+//             }
+//         }
+//         displayMovieCenter(movieToDisplay)
+//     })
+// }
+
+function initializePOST () {
     fetch("https://mcuapi.herokuapp.com/api/v1/movies")
     .then(data => data.json())
     .then(json => {
-        //console.log(json)
         const startTime = new Date(json.data[1].release_date)
         let minTime = startTime.getTime()
         let movieToDisplay
@@ -35,6 +56,7 @@ function initialize () {
         }
         displayMovieCenter(movieToDisplay)
     })
+    updateCounter()
 }
 
 function topTenLoadList () {
@@ -149,38 +171,38 @@ function displayMovieCenter (movieToDisplay) {
 
 }
 
-//add movie to My List if it doesnt already exist in the list
-function addToMyList () {
-    const addToMyListBtn = document.querySelector("#addToMyList")
-    const counter = document.querySelector("#listCounter")
-    addToMyListBtn.addEventListener("click", () => {
-        fetch("https://mcuapi.herokuapp.com/api/v1/movies")
-        .then(data => data.json())
-        .then(movies => {
-            const h2 = document.querySelector("h2")
-            const h4 = document.querySelector("h4")
-            const moveToAddToList = movies.data.find(movie => movie.title === h2.textContent)
-            if (!myList.some(movie => movie.title === moveToAddToList.title)) {
-                myList.push(moveToAddToList)
-                myListCount++
-                counter.textContent = `My List count: ${myListCount}`
-            }
-            if (h4.textContent === "Ordered by: My List") {
-                addMovieList(myList, "My List", false)
-            }
-        })
-    })
-}
+// //add movie to My List if it doesnt already exist in the list
+// function addToMyList () {
+//     const addToMyListBtn = document.querySelector("#addToMyList")
+//     const counter = document.querySelector("#listCounter")
+//     addToMyListBtn.addEventListener("click", () => {
+//         fetch("https://mcuapi.herokuapp.com/api/v1/movies")
+//         .then(data => data.json())
+//         .then(movies => {
+//             const h2 = document.querySelector("h2")
+//             const h4 = document.querySelector("h4")
+//             const moveToAddToList = movies.data.find(movie => movie.title === h2.textContent)
+//             if (!myList.some(movie => movie.title === moveToAddToList.title)) {
+//                 myList.push(moveToAddToList)
+//                 myListCount++
+//                 counter.textContent = `My List count: ${myListCount}`
+//             }
+//             if (h4.textContent === "Ordered by: My List") {
+//                 addMovieList(myList, "My List", false)
+//             }
+//         })
+//     })
+// }
 
-//view my customized list when button is clicked
-function ViewMyList () { 
-    viewMyListBtn = document.querySelector("#myList")
-    viewMyListBtn.addEventListener("click", () => {
-        if (myList.length > 0) { //if there is no items in the list, dont call addMovieList
-            addMovieList(myList, "My List")
-        }
-    })
-}
+// //view my customized list when button is clicked
+// function ViewMyList () { 
+//     viewMyListBtn = document.querySelector("#myList")
+//     viewMyListBtn.addEventListener("click", () => {
+//         if (myList.length > 0) { //if there is no items in the list, dont call addMovieList
+//             addMovieList(myList, "My List")
+//         }
+//     })
+// }
 
 //add movie list to right pane, and first movie of that list is featured
 function addMovieList (list, listString, replaceFeature=true) {
@@ -257,6 +279,65 @@ function searchBar () {
     
 }
 
+function updateCounter () {
+    const counter = document.querySelector("#listCounter")
+    fetch("http://localhost:3000/data")
+    .then(data => data.json())
+    .then(myMovies => {
+        counter.textContent = `My List count: ${myMovies.length}`
+    })
+}
+
+
+//add movie to My List if it doesnt already exist in the list
+function addToMyListPOST () {
+    const addToMyListBtn = document.querySelector("#addToMyList")
+    const h2 = document.querySelector("h2") //already using
+    const h4 = document.querySelector("h4") //to update right pane if myList is loaded there
+    addToMyListBtn.addEventListener("click", () => {
+        fetch("https://mcuapi.herokuapp.com/api/v1/movies")
+        .then(data => data.json())
+        .then(movies => {
+            fetch("http://localhost:3000/data")
+            .then(data => data.json())
+            .then(myMovies => {
+                const movieToAddToList = movies.data.find(movie => movie.title === h2.textContent)
+                if (!myMovies.some(movie => movie.title === movieToAddToList.title)) {
+                    fetch("http://localhost:3000/data", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type" : "application/json"
+                        },
+                        body: JSON.stringify(movieToAddToList)
+                    })
+                    .then(response => response.json)
+                }
+                if (h4.textContent === "Ordered by: My List") {
+                    fetch("http://localhost:3000/data")
+                    .then(data => data.json())
+                    .then(myMovieToList => {
+                        addMovieList(myMovieToList, "My List", false)
+                    })
+                }
+                updateCounter()
+            })
+        })
+    })
+}
+
+//view my customized list when button is clicked
+function ViewMyListPOST () { 
+    viewMyListBtn = document.querySelector("#myList")
+    viewMyListBtn.addEventListener("click", () => {
+        fetch("http://localhost:3000/data")
+        .then(data => data.json())
+        .then(myMovies => {
+            if (myMovies.length > 0) {
+                addMovieList(myMovies, "My List")              
+            }
+        })
+    })
+}
 
 
 
